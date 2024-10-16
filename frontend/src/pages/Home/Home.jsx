@@ -34,7 +34,7 @@ const Home = () => {
                         Have an invite text?
                     </span>
                     <Link style={signInLinkStyle} to="/login">
-                        Sign in
+                        Sign In
                     </Link>
                 </div>
             </Card>
