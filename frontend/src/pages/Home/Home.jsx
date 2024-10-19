@@ -1,21 +1,21 @@
 import React from 'react';
 import styles from './Home.module.css';
-import { Link, useNavigate } from 'react-router-dom';  // Use useNavigate instead of useHistory
+import { useNavigate } from 'react-router-dom';
 import Card from '../../components/shared/Card/Card';
 import Button from '../../components/shared/Button/Button';
 
 const Home = () => {
-    const signInLinkStyle = {
-        color: '#0077ff',
-        fontWeight: 'bold',
-        textDecoration: 'none',
-        marginLeft: '10px',
-    };
+    // const signInLinkStyle = {
+    //     color: '#0077ff',
+    //     fontWeight: 'bold',
+    //     textDecoration: 'none',
+    //     marginLeft: '10px',
+    // };
 
-    const navigate = useNavigate();  // useNavigate hook
+    const navigate = useNavigate();
 
     function startRegister() {
-        navigate('/register');  // Use navigate instead of history.push
+        navigate('/authenticate');
     }
 
     return (
@@ -27,15 +27,13 @@ const Home = () => {
                     gradually to make sure nothing breaks.
                 </p>
                 <div>
-                    <Button onClick={startRegister} text="Get your username" />
+                    <Button onClick={startRegister} text="Let's Go" />
                 </div>
                 <div className={styles.signinWrapper}>
                     <span className={styles.hasInvite}>
                         Have an invite text?
                     </span>
-                    <Link style={signInLinkStyle} to="/login">
-                        Sign In
-                    </Link>
+                    
                 </div>
             </Card>
         </div>
