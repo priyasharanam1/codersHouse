@@ -1,5 +1,7 @@
-const otpService = require('../services/otp-service.js')
-const hashService = require('../services/hash-service.js')
+const otpService = require("../services/otp-service.js");
+const hashService = require("../services/hash-service.js");
+const userService = require('../services/user-service.js');
+const tokenService = require('../services/token-service.js');
 
 class AuthController {
   async sendOtp(req, res) {
@@ -25,7 +27,41 @@ class AuthController {
       console.log(err);
       res.status(500).json({ message: "Failure during sending message" });
     }
+  }
 
+  async verifyOtp(req,res){
+    const {otp, hash, phone} = req.body;
+    if(!otp || !hash || !phone){
+      res.status(400).json({message : 'All fields are required!'})
+    }
+
+    const [hashedOtp, expires] = hash.split('.');
+    if(Date.now() > +expires){
+      res.status(400).json({message : 'OTP expired!'})
+    }
+
+    const data = `${phone}.${otp}.${expires}`;
+
+    const isValid = otpService.verifyOtp(hashedOtp, data);
+    if(!isValid){
+      res.status(400).json({message: 'Invalid OTP!'})
+    }
+    let user;
+    // let accessToken;
+    // let refreshToken;
+
+    try{
+       user = await userService.findUser({phone});
+       if(!user){
+        user = await userService.createUser({phone});
+       }
+    }catch(err){
+       console.log(err);
+       res.status(500).json({message: 'DB error'})
+    }
+     
+    //generate jwt tokens
+    const {accessToken, refreshToken} = tokenService.generateTokens()
   }
 }
 
