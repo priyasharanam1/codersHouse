@@ -18,10 +18,11 @@ class AuthController {
 
     //send otp
     try {
-      await otpService.sendBySms(phone, otp);
+      // await otpService.sendBySms(phone, otp);
       res.json({
         hash: `${hash}.${expires}`,
         phone,
+        otp
       });
     } catch (err) {
       console.log(err);
@@ -61,7 +62,14 @@ class AuthController {
     }
      
     //generate jwt tokens
-    const {accessToken, refreshToken} = tokenService.generateTokens()
+    const {accessToken, refreshToken} = tokenService.generateTokens({_id : user._id, activated : false})
+    //http cookie -> javascript on the client cannot read it, only server can read
+    //refresh token to be sent in cookie
+    res.cookie('refreshToken', refreshToken,{
+      maxAge : 1000*60*60*24*30, //30 days
+      httpOnly : true
+    })
+    res.json({accessToken})
   }
 }
 
