@@ -3,6 +3,8 @@
   align-items: center;
   justify-content: center;
   margin-top: 6rem;
+  padding: 0 4rem;
+  margin-left: 6rem;
 }
 .buttonWrap {
   margin-bottom: 20px;
